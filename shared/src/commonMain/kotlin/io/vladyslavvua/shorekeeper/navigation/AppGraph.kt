@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import io.vladyslavvua.shorekeeper.feature.openedCef.OpenedCefScreen
 import io.vladyslavvua.shorekeeper.feature.openedShore.OpenedShore
 import io.vladyslavvua.shorekeeper.feature.settings.SettingsScreen
 import io.vladyslavvua.shorekeeper.feature.welcome.WelcomeScreen
@@ -22,6 +23,10 @@ fun AppGraph() {
         }
         composable<NavigationPaths.Settings> {
             SettingsScreen(navController)
+        }
+
+        composable <NavigationPaths.OpenCef>{
+            OpenedCefScreen()
         }
     }
 }

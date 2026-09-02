@@ -14,4 +14,7 @@ sealed class NavigationPaths {
 
     @Serializable
     object Settings : NavigationPaths()
+
+    @Serializable
+    object OpenCef : NavigationPaths()
 }

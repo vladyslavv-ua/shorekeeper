@@ -25,11 +25,15 @@ sealed class WelcomeIntent {
 
     data object OpenAddShoreDialog : WelcomeIntent()
 
+    data object OpenCef: WelcomeIntent()
+
+
 }
 
 sealed class WelcomeEffect {
 
     data object OpenSettingsAction : WelcomeEffect()
+    data object OpenCef : WelcomeEffect()
 
     data class OpenShore(val shoreId: Long) : WelcomeEffect()
 }

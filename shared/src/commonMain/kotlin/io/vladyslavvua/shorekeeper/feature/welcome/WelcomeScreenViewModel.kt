@@ -49,6 +49,7 @@ class WelcomeScreenViewModel(
             is WelcomeIntent.CloseCreateShoreDialog -> closeCreateShoreDialog()
             is WelcomeIntent.CreateShore -> createShore(intent.params)
             is WelcomeIntent.SelectShore -> selectShore(intent.id)
+            is WelcomeIntent.OpenCef -> openCef()
             else -> Unit
         }
 
@@ -81,6 +82,10 @@ class WelcomeScreenViewModel(
         state.update {
             it.copy(isCreateShoreDialogOpen = true)
         }
+    }
+
+    private fun openCef() {
+        _events.trySend(WelcomeEffect.OpenCef)
     }
 
     private fun closeCreateShoreDialog() {
