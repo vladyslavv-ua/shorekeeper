@@ -22,6 +22,7 @@ kotlin {
     
     sourceSets {
         commonMain.dependencies {
+            implementation(libs.jooq)
 
             implementation(ktorLibs.server.core)
             implementation(ktorLibs.server.netty)

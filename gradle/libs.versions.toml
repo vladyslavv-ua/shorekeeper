@@ -6,6 +6,7 @@ compose-navigation = "2.9.2"
 datastore = "1.2.1"
 
 jcef-maven = "146.0.10"
+jooq = "3.21.7"
 junit = "4.13.2"
 kotlin = "2.4.10"
 kotlinx-coroutines = "1.11.0"
@@ -37,7 +38,9 @@ koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel" }
 koin-compose-viewmodel-navigation = { module = "io.insert-koin:koin-compose-viewmodel-navigation" }
 koin-annotations = { module = "io.insert-koin:koin-annotations" }
 koin-test = { module = "io.insert-koin:koin-test" }
-koin-coroutines = {module = "io.insert-koin:koin-core-coroutines"}
+koin-coroutines = { module = "io.insert-koin:koin-core-coroutines" }
+
+jooq = { module = "org.jooq:jooq", version.ref = "jooq" }
 
 junit = { module = "junit:junit", version.ref = "junit" }
 androidx-lifecycle-viewmodelCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }

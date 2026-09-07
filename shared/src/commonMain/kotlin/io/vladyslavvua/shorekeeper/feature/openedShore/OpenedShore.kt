@@ -9,7 +9,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import io.vladyslavvua.shorekeeper.feature.openedShore.dialogs.AuthDialog
+import io.vladyslavvua.shorekeeper.feature.openedShore.OpenedShoreIntent.ConfirmCredentials
+import io.vladyslavvua.shorekeeper.ui.components.AuthDialog
 import io.vladyslavvua.shorekeeper.ui.components.BrowserView
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -44,7 +45,7 @@ fun OpenedShore(shoreId: Long, navController: NavController) {
             },
             onConfirm = { username, password ->
                 viewModel.onIntent(
-                    OpenedShoreIntent.ConfirmCredentials(
+                    ConfirmCredentials(
                         username = username,
                         password = password
                     )

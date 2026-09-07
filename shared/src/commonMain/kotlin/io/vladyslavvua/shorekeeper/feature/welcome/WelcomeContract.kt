@@ -26,6 +26,7 @@ sealed class WelcomeIntent {
     data object OpenAddShoreDialog : WelcomeIntent()
 
     data object OpenCef: WelcomeIntent()
+    data object OpenEditShore: WelcomeIntent()
 
 
 }
@@ -36,4 +37,6 @@ sealed class WelcomeEffect {
     data object OpenCef : WelcomeEffect()
 
     data class OpenShore(val shoreId: Long) : WelcomeEffect()
+
+    data class OpenEditShore(val shoreId: Long) : WelcomeEffect()
 }

@@ -1,4 +1,4 @@
-package io.vladyslavvua.shorekeeper.jcef
+package io.vladyslavvua.shorekeeper.jcef.dto
 
 import kotlinx.serialization.Serializable
 

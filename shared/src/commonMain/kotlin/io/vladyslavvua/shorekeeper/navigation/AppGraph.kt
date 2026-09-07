@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import io.vladyslavvua.shorekeeper.feature.editShore.EditShoreScreen
 import io.vladyslavvua.shorekeeper.feature.openedCef.OpenedCefScreen
 import io.vladyslavvua.shorekeeper.feature.openedShore.OpenedShore
 import io.vladyslavvua.shorekeeper.feature.settings.SettingsScreen
@@ -20,6 +21,11 @@ fun AppGraph() {
         composable<NavigationPaths.Welcome.Shore> { navBackStackEntry ->
             val params = navBackStackEntry.toRoute<NavigationPaths.Welcome.Shore>()
             OpenedShore(params.shoreId, navController)
+        }
+
+        composable<NavigationPaths.Welcome.EditShore> { navBackStackEntry ->
+            val params = navBackStackEntry.toRoute<NavigationPaths.Welcome.EditShore>()
+            EditShoreScreen(params.shoreId, navController)
         }
         composable<NavigationPaths.Settings> {
             SettingsScreen(navController)

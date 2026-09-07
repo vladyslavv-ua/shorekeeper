@@ -50,6 +50,7 @@ class WelcomeScreenViewModel(
             is WelcomeIntent.CreateShore -> createShore(intent.params)
             is WelcomeIntent.SelectShore -> selectShore(intent.id)
             is WelcomeIntent.OpenCef -> openCef()
+            is WelcomeIntent.OpenEditShore -> openEditShore()
             else -> Unit
         }
 
@@ -63,6 +64,13 @@ class WelcomeScreenViewModel(
                 }
             )
         }
+    }
+
+    private fun openEditShore() {
+        val activeShore = state.value.shores.firstOrNull { it.selected }
+        if (activeShore == null) return
+
+        _events.trySend(WelcomeEffect.OpenEditShore(activeShore.id))
     }
 
     private fun openSettings() {

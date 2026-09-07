@@ -10,6 +10,9 @@ sealed class NavigationPaths {
 
         @Serializable
         data class Shore(val shoreId: Long) : NavigationPaths()
+
+        @Serializable
+        data class EditShore(val shoreId: Long) : NavigationPaths()
     }
 
     @Serializable

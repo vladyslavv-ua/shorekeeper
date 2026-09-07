@@ -50,6 +50,7 @@ fun WelcomeScreen(
                 is WelcomeEffect.OpenSettingsAction -> navGraph.navigate(NavigationPaths.Settings)
                 is WelcomeEffect.OpenShore -> navGraph.navigate(NavigationPaths.Welcome.Shore(effect.shoreId))
                 is WelcomeEffect.OpenCef -> navGraph.navigate(NavigationPaths.OpenCef)
+                is WelcomeEffect.OpenEditShore -> navGraph.navigate(NavigationPaths.Welcome.EditShore(effect.shoreId))
                 else -> Unit
             }
         }
@@ -92,6 +93,12 @@ fun WelcomeScreen(
                 viewModel.onIntent(WelcomeIntent.OpenAddShoreDialog)
             }) {
                 Text("Add shore")
+            }
+
+            Button(onClick = {
+                viewModel.onIntent(WelcomeIntent.OpenEditShore)
+            }){
+                Text("Edit shore")
             }
 
             Button(

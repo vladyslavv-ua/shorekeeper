@@ -1,5 +1,7 @@
 package io.vladyslavvua.shorekeeper.jcef
 
+import io.vladyslavvua.shorekeeper.jcef.dto.JsToKotlinRequest
+import io.vladyslavvua.shorekeeper.jcef.dto.KotlinToJsResponse
 import kotlinx.serialization.json.Json
 import org.cef.browser.CefBrowser
 import org.cef.browser.CefFrame

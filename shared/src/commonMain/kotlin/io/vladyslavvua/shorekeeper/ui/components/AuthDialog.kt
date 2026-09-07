@@ -1,4 +1,4 @@
-package io.vladyslavvua.shorekeeper.feature.openedShore.dialogs
+package io.vladyslavvua.shorekeeper.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
