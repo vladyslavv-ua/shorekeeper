@@ -1,22 +1,15 @@
-This is a Kotlin Multiplatform project targeting Desktop (JVM).
+# Shorekeeper
 
-* [/shared](./shared/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./shared/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./shared/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./shared/src/jvmMain/kotlin)
-    folder is the appropriate location.
+Shorekeeper is a rapid application development framework for building data-driven GUI applications
 
-### Running the apps
-
-Use the run configurations provided by the run widget in your IDE's toolbar. You can also use these commands and options:
-
-- Desktop app:
-  - Hot reload: `./gradlew :desktopApp:hotRun --auto`
-  - Standard run: `./gradlew :desktopApp:run`
-
----
-
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+## Using
+(currently under development)
+1. Clone the repo
+2. Build the project
+3. Download JCEF from [here](https://github.com/jcefmaven/jcefbuild/releases) for your platform
+4. Extract the lib/yourplatform folder to the desired location
+5. Download JDBC driver for your database to the 'jdbc-drivers' folder in the executable folder
+6. Run shorekeeper
+7. Set up paths on the settings page
+8. Create a new project
+9. Enjoy
