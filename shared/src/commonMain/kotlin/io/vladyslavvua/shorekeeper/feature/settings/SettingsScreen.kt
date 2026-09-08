@@ -1,6 +1,7 @@
 package io.vladyslavvua.shorekeeper.feature.settings
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -39,7 +40,22 @@ fun SettingsScreen(navController: NavController) {
             value = state.cefCachePath,
             onValueChange = { viewModel.onIntent(SettingsScreenIntent.SetCefCachePath(it)) })
 
+        Text("Liquibase path to executable")
+        Row {
 
+            TextField(
+                value = state.liquibasePath,
+                onValueChange = { viewModel.onIntent(SettingsScreenIntent.SetLiquibasePath(it)) })
+
+            Button(
+                onClick = {
+                    viewModel.onIntent(SettingsScreenIntent.CheckLiquibasePath)
+                }) {
+                Text("Check")
+            }
+
+
+        }
 
         Button(onClick = { viewModel.onIntent(SettingsScreenIntent.Save) }) {
             Text("Save")

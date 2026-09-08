@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.annotation.KoinViewModel
+import java.io.File
 
 @KoinViewModel
 class SettingsViewModel(
@@ -28,7 +29,8 @@ class SettingsViewModel(
                 it.copy(
                     cefPath = settingsManager.getCefSettings().cefPath,
                     cefHelperPath = settingsManager.getCefSettings().cefHelper,
-                    cefCachePath = settingsManager.getCefSettings().cefCachePath
+                    cefCachePath = settingsManager.getCefSettings().cefCachePath,
+                    liquibasePath = settingsManager.getSettings().liquibasePath,
                 )
             }
         }
@@ -41,8 +43,41 @@ class SettingsViewModel(
             is SettingsScreenIntent.SetCefCachePath -> updateCefCacheField(intent.path)
             is SettingsScreenIntent.Save -> saveSettings()
             is SettingsScreenIntent.NavigateBack -> navigateBack()
+            is SettingsScreenIntent.SetLiquibasePath -> updateLiquibaseField(intent.path)
+            is SettingsScreenIntent.CheckLiquibasePath -> checkLiquibasePath()
 
             else -> Unit
+        }
+    }
+
+    private fun checkLiquibasePath() {
+        val path = state.value.liquibasePath
+        if (File(path).exists()) {
+            val process = ProcessBuilder()
+                .command(path, "--version")
+                .start()
+            process.waitFor()
+            if (process.exitValue() == 0) {
+                state.update {
+                    it.copy(liquibasePathValid = true)
+                }
+            }
+            else if (path == ""){
+                state.update {
+                    it.copy(liquibasePathValid = null)
+                }
+            }
+            else {
+                state.update {
+                    it.copy(liquibasePathValid = false)
+                }
+            }
+        }
+    }
+
+    private fun updateLiquibaseField(path: String) {
+        state.update {
+            it.copy(liquibasePath = path)
         }
     }
 
@@ -70,12 +105,14 @@ class SettingsViewModel(
 
     private fun saveSettings() {
         val settings = state.value
+        checkLiquibasePath()
         viewModelScope.launch {
             settingsManager.updateSettings(
                 ShorekeeperSettings(
                     settings.cefPath,
                     settings.cefHelperPath,
-                    settings.cefCachePath
+                    settings.cefCachePath,
+                    liquibasePath = if (settings.liquibasePathValid == true) settings.liquibasePath else ""
                 )
             )
         }

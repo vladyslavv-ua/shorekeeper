@@ -4,22 +4,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.vladyslavvua.shorekeeper.feature.welcome.createShoreDialog.CreateShoreDialogState
 import io.vladyslavvua.shorekeeper.feature.welcome.map.toShoreState
-import io.vladyslavvua.shorekeeper.room.dao.ShoreDao
-import io.vladyslavvua.shorekeeper.room.entity.ShoreTable
 import io.vladyslavvua.shorekeeper.room.repo.ShoreRepo
+import io.vladyslavvua.shorekeeper.settings.ShorekeeperSettingsManager
 import io.vladyslavvua.shorekeeper.shore.util.initShoreFileStructure
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.annotation.KoinViewModel
+import java.io.File
 
 @KoinViewModel
 class WelcomeScreenViewModel(
     private val shoreRepo: ShoreRepo,
+    private val settings: ShorekeeperSettingsManager
 ) : ViewModel() {
 
     private val _events = Channel<WelcomeEffect>()
@@ -104,10 +104,17 @@ class WelcomeScreenViewModel(
 
     private fun createShore(shore: CreateShoreDialogState) {
         viewModelScope.launch {
+            val migrator = settings.getMigratorPath(shore.migrator)
             val creationResult = initShoreFileStructure(
                 shore.toShore(),
                 shore.path,
             )
+            val formattedPath = File(shore.path).absolutePath
+            migrator.initFileStructure(formattedPath)
+            val process = migrator.initProject("${formattedPath}/migrations", shore.connectionString, shore.dbUser, shore.dbPassword)
+            process.inheritIO()
+            process.start().waitFor()
+
             if (!creationResult) return@launch
             shoreRepo.insertShore(shore.name, shore.path)
             initShoreDb()
