@@ -1,5 +1,6 @@
 package io.vladyslavvua.shorekeeper.feature.welcome.createShoreDialog
 
+import io.vladyslavvua.shorekeeper.APP_VERSION_CODE
 import io.vladyslavvua.shorekeeper.shore.entity.AuthType
 import io.vladyslavvua.shorekeeper.shore.entity.Migrator
 import io.vladyslavvua.shorekeeper.shore.entity.Shore
@@ -15,6 +16,7 @@ data class CreateShoreDialogState(
     val dbPassword: String
 ) {
     fun toShore(): Shore = Shore(
+        shorekeeperVersion = APP_VERSION_CODE,
         name = name,
         version = 0,
         migrator = migrator,

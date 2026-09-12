@@ -56,56 +56,63 @@ fun WelcomeScreen(
         }
     }
 
-    Row(modifier = Modifier.fillMaxWidth().border(1.dp, Color.Red)) {
-        Column {
+    Column {
+        Row(modifier = Modifier.fillMaxWidth().border(1.dp, Color.Red)) {
+            Column {
 
-            Text("Available shores:")
+                Text("Available shores:")
 
-            LazyColumn(Modifier.height(500.dp).background(Color.White)) {
-                items(state.shores, key = { it.id }) {
-                    Text(
-                        it.name, modifier = Modifier.width(200.dp).clickable(onClick = {
-                            viewModel.onIntent(WelcomeIntent.SelectShore(it.id))
-                        }).background(if (it.selected) Color.Black else Color.Transparent),
-                        color = if (it.selected) Color.White else Color.Black
-                    )
+                LazyColumn(Modifier.height(500.dp).background(Color.White)) {
+                    items(state.shores, key = { it.id }) {
+                        Text(
+                            it.name, modifier = Modifier.width(200.dp).clickable(onClick = {
+                                viewModel.onIntent(WelcomeIntent.SelectShore(it.id))
+                            }).background(if (it.selected) Color.Black else Color.Transparent),
+                            color = if (it.selected) Color.White else Color.Black
+                        )
+                    }
                 }
+
+
             }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Column {
+
+                Button(onClick = {
+                    viewModel.onIntent(WelcomeIntent.OpenShore)
+                }) {
+                    Text("Launch")
+                }
+
+                Button(onClick = {
+                    viewModel.onIntent(WelcomeIntent.OpenCreateShoreDialog)
+                }) {
+                    Text("New shore")
+                }
+                Button(onClick = {
+                    viewModel.onIntent(WelcomeIntent.OpenAddShoreDialog)
+                }) {
+                    Text("Add shore")
+                }
+
+                Button(onClick = {
+                    viewModel.onIntent(WelcomeIntent.OpenEditShore)
+                }) {
+                    Text("Edit shore")
+                }
+
+            }
+
 
         }
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        Column {
-
-            Button(onClick = {
-                viewModel.onIntent(WelcomeIntent.OpenShore)
-            }) {
-                Text("Launch")
-            }
-
-            Button(onClick = {
-                viewModel.onIntent(WelcomeIntent.OpenCreateShoreDialog)
-            }) {
-                Text("New shore")
-            }
-            Button(onClick = {
-                viewModel.onIntent(WelcomeIntent.OpenAddShoreDialog)
-            }) {
-                Text("Add shore")
-            }
-
-            Button(onClick = {
-                viewModel.onIntent(WelcomeIntent.OpenEditShore)
-            }){
-                Text("Edit shore")
-            }
-
+        Row {
             Button(
                 onClick = {
                     viewModel.onIntent(WelcomeIntent.OpenCef)
                 }
-            ){
+            ) {
                 Text("Cef")
             }
             Button(onClick = {
@@ -114,7 +121,6 @@ fun WelcomeScreen(
                 Text("Settings")
             }
         }
-
     }
 
 }
