@@ -25,3 +25,4 @@ node_modules/
 **/*.db-shm
 **/*.db-wal
 **/shorekeeper.json
+**/*.log

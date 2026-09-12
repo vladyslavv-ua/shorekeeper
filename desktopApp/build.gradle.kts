@@ -12,7 +12,13 @@ dependencies {
     implementation(libs.koin.core)
     implementation(project(":shared"))
 
-    implementation(compose.desktop.currentOs)
+//    implementation(compose.desktop.currentOs)
+
+    implementation(libs.compose.desktop.linuxX64)
+    implementation(libs.compose.desktop.winX64)
+    implementation(libs.compose.desktop.macosX64)
+    implementation(libs.compose.desktop.macosArm64)
+
     implementation(libs.kotlinx.coroutinesSwing)
 
     implementation(libs.compose.uiToolingPreview)

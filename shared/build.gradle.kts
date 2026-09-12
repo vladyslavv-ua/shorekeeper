@@ -1,3 +1,4 @@
+import org.gradle.kotlin.dsl.kotlin
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -18,7 +19,6 @@ kotlin {
         freeCompilerArgs.add("-Xexplicit-backing-fields")
     }
     jvm()
-    
     
     sourceSets {
         commonMain.dependencies {

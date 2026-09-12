@@ -19,3 +19,15 @@ Shorekeeper is a rapid application development framework for building data-drive
 13. Write SQL queries to your db
 14. Using window.cefQuery or [wrapper](https://github.com/vladyslavv-ua/shorekeeper-wrapper) join queries to html
 15. Enjoy
+
+
+## Shorekeeper vs alternatives
+
+| Criteria           | MS access                              | LibreOffice base                         | Shorekeeper                                   |
+|--------------------|----------------------------------------|------------------------------------------|-----------------------------------------------|
+| Price              | Paid                                   | Open source                              | Open source                                   |
+| DB Support         | Proprietary db, ODBC compliant drivers | Own db, RDMS with JDBC compliant drivers | RDMS with JDBC compliant drivers              |
+| Design             | Desktop WYSIWYG Forms                  | Desktop WYSIWYG Forms                    | Using Web stack                               |
+| Design flexibility | Poor                                   | Poor                                     | Rich — any web framework, full markup control |
+| Logic language     | VBA                                    | LO Basic, Python, JS, BeanShell          | JS                                            |
+| Platforms          | Windows only                           | Cross platform                           | Cross platform                                |
