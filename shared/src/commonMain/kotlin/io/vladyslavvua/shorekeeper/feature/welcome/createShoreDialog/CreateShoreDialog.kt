@@ -32,6 +32,9 @@ fun CreateShoreDialog(onCreate: (CreateShoreDialogState) -> Unit, onCancel: () -
 //            TextField(shoreMigrator.name, onValueChange = { shoreMigrator = Migrator.valueOf(it) }, placeholder = { Text("Shore migrator") })
 //            TextField(authDb.name, onValueChange = { authDb = AuthDb.valueOf(it) }, placeholder = { Text("Auth db") })
             TextField(shoreDbConnection, onValueChange = { shoreDbConnection = it }, placeholder = { Text("Shore db connection") })
+
+
+
             TextField(dbUser, onValueChange = { dbUser = it }, placeholder = { Text("Db user ") })
             TextField(dbPassword, onValueChange = { dbPassword = it }, placeholder = { Text("Db password")})
 

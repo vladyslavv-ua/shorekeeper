@@ -6,6 +6,7 @@ import io.vladyslavvua.shorekeeper.room.entity.ShoreTable
 data class WelcomeState(
     val shores: List<ShoreState> = emptyList(),
     val isCreateShoreDialogOpen: Boolean = false,
+    val isAnyShoreSelected: Boolean = false
 ) {
     data class ShoreState(
         val id: Long,

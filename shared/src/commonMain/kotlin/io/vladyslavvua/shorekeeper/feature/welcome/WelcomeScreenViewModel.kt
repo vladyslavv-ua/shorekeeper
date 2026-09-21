@@ -51,8 +51,13 @@ class WelcomeScreenViewModel(
             is WelcomeIntent.SelectShore -> selectShore(intent.id)
             is WelcomeIntent.OpenCef -> openCef()
             is WelcomeIntent.OpenEditShore -> openEditShore()
+            is WelcomeIntent.OpenAddShoreDialog -> openAddShoreDialog()
             else -> Unit
         }
+
+    }
+
+    private fun openAddShoreDialog() {
 
     }
 
@@ -61,7 +66,8 @@ class WelcomeScreenViewModel(
             it.copy(
                 shores = it.shores.map { shore ->
                     if (shore.id == id) shore.copy(selected = true) else shore.copy(selected = false)
-                }
+                },
+                isAnyShoreSelected = true,
             )
         }
     }

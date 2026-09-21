@@ -29,13 +29,13 @@ import io.vladyslavvua.shorekeeper.feature.welcome.createShoreDialog.CreateShore
 import io.vladyslavvua.shorekeeper.navigation.NavigationPaths
 import org.koin.compose.viewmodel.koinViewModel
 
-@OptIn(ExperimentalFlexBoxApi::class)
 @Composable
 fun WelcomeScreen(
     navGraph: NavController,
 ) {
     val viewModel = koinViewModel<WelcomeScreenViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
+
 
     if (state.isCreateShoreDialogOpen) {
         CreateShoreDialog({
@@ -82,7 +82,7 @@ fun WelcomeScreen(
 
                 Button(onClick = {
                     viewModel.onIntent(WelcomeIntent.OpenShore)
-                }) {
+                }, enabled = state.isAnyShoreSelected) {
                     Text("Launch")
                 }
 
@@ -99,7 +99,7 @@ fun WelcomeScreen(
 
                 Button(onClick = {
                     viewModel.onIntent(WelcomeIntent.OpenEditShore)
-                }) {
+                }, enabled = state.isAnyShoreSelected) {
                     Text("Edit shore")
                 }
 

@@ -28,6 +28,17 @@ Shorekeeper is a rapid application development framework for building data-drive
 | Price              | Paid                                   | Open source                              | Open source                                   |
 | DB Support         | Proprietary db, ODBC compliant drivers | Own db, RDMS with JDBC compliant drivers | RDMS with JDBC compliant drivers              |
 | Design             | Desktop WYSIWYG Forms                  | Desktop WYSIWYG Forms                    | Using Web stack                               |
-| Design flexibility | Poor                                   | Poor                                     | Rich — any web framework, full markup control |
+| Design flexibility | Poor                                   | Poor                                     | Rich - any web framework, full markup control |
 | Logic language     | VBA                                    | LO Basic, Python, JS, BeanShell          | JS                                            |
 | Platforms          | Windows only                           | Cross platform                           | Cross platform                                |
+
+## ToDo
+
+- [ ] Improve UI
+- [ ] Add caching logic
+- [ ] Add flyway support
+- [ ] Implement own migrator
+- [ ] Add support for plugins
+- [ ] Add GUI table builder
+- [ ] Improve shore security
+- [ ] Add update logic

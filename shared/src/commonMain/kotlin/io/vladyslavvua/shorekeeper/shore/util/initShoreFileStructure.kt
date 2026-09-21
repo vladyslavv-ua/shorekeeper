@@ -17,5 +17,8 @@ fun initShoreFileStructure(shore: Shore, path: String): Boolean {
     val json = Json { prettyPrint = true }
     val shoreJson = json.encodeToString(shore)
     File(path, "shore.json").writeText(shoreJson)
+    val agents = object {}::class.java.classLoader.getResource("AGENTS.md")?.readText()
+    File(path, "AGENTS.md").writeText(agents!!)
+
     return true
 }
