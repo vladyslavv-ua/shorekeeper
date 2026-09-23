@@ -9,12 +9,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
 import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
-fun SettingsScreen(navController: NavController) {
+fun SettingsScreen(onNavigateBack: () -> Unit) {
     val viewModel: SettingsViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -22,7 +21,7 @@ fun SettingsScreen(navController: NavController) {
         viewModel.events.collect { effect ->
             when (effect) {
                 is SettingsScreenEffect.NavigateBack -> {
-                    navController.navigateUp()
+                    onNavigateBack()
                 }
             }
         }

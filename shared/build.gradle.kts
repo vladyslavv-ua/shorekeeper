@@ -35,7 +35,12 @@ kotlin {
             implementation(libs.datastore)
             implementation(libs.datastore.prefs)
 
-            implementation(libs.compose.navigation)
+//            implementation(libs.compose.navigation)
+
+            implementation(libs.androidx.navigation3.runtime)
+            implementation(libs.androidx.navigation3.ui)
+            implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+//            implementation(libs.androidx.material3.adaptive.navigation3)
 
             implementation(project.dependencies.platform(libs.koin.bom))
             implementation(libs.koin.core)

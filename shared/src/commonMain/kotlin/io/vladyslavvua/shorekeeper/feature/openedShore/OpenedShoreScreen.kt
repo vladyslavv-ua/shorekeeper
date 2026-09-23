@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
 import io.vladyslavvua.shorekeeper.feature.openedShore.OpenedShoreIntent.ConfirmCredentials
 import io.vladyslavvua.shorekeeper.ui.components.AuthDialog
 import io.vladyslavvua.shorekeeper.ui.components.BrowserView
@@ -17,7 +16,7 @@ import org.koin.core.parameter.parametersOf
 
 
 @Composable
-fun OpenedShore(shoreId: Long, navController: NavController) {
+fun OpenedShoreScreen(shoreId: Long, onNavigateBack: () -> Unit) {
     val viewModel: OpenedShoreVm = koinViewModel { parametersOf(shoreId) }
     val browser = viewModel.browser
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -28,8 +27,7 @@ fun OpenedShore(shoreId: Long, navController: NavController) {
 
             when (effect) {
                 is OpenedShoreEffect.CloseEffect -> {
-                    navController.navigateUp()
-
+                    onNavigateBack()
                 }
 
                 else -> Unit

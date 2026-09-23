@@ -24,14 +24,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
 import io.vladyslavvua.shorekeeper.feature.welcome.createShoreDialog.CreateShoreDialog
 import io.vladyslavvua.shorekeeper.navigation.NavigationPaths
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun WelcomeScreen(
-    navGraph: NavController,
+    onNavigate: (NavigationPaths) -> Unit
 ) {
     val viewModel = koinViewModel<WelcomeScreenViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -47,10 +46,10 @@ fun WelcomeScreen(
     LaunchedEffect(viewModel.events) {
         viewModel.events.collect { effect ->
             when (effect) {
-                is WelcomeEffect.OpenSettingsAction -> navGraph.navigate(NavigationPaths.Settings)
-                is WelcomeEffect.OpenShore -> navGraph.navigate(NavigationPaths.Welcome.Shore(effect.shoreId))
-                is WelcomeEffect.OpenCef -> navGraph.navigate(NavigationPaths.OpenCef)
-                is WelcomeEffect.OpenEditShore -> navGraph.navigate(NavigationPaths.Welcome.EditShore(effect.shoreId))
+                is WelcomeEffect.OpenSettingsAction -> onNavigate(NavigationPaths.Settings)
+                is WelcomeEffect.OpenShore -> onNavigate(NavigationPaths.Shore.OpenedShore(effect.shoreId))
+                is WelcomeEffect.OpenCef -> onNavigate(NavigationPaths.OpenCef)
+                is WelcomeEffect.OpenEditShore -> onNavigate(NavigationPaths.Shore.EditShore(effect.shoreId))
                 else -> Unit
             }
         }

@@ -1,23 +1,29 @@
 package io.vladyslavvua.shorekeeper.navigation
 
+import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed class NavigationPaths {
+sealed interface NavigationPaths : NavKey {
 
     @Serializable
-    object Welcome : NavigationPaths() {
+    object Welcome : NavigationPaths {
 
-        @Serializable
-        data class Shore(val shoreId: Long) : NavigationPaths()
-
-        @Serializable
-        data class EditShore(val shoreId: Long) : NavigationPaths()
     }
 
     @Serializable
-    object Settings : NavigationPaths()
+    data object Shore : NavigationPaths {
+        @Serializable
+        data class OpenedShore(val shoreId: Long) : NavigationPaths
+
+        @Serializable
+        data class EditShore(val shoreId: Long) : NavigationPaths
+    }
+
 
     @Serializable
-    object OpenCef : NavigationPaths()
+    object Settings : NavigationPaths
+
+    @Serializable
+    object OpenCef : NavigationPaths
 }
