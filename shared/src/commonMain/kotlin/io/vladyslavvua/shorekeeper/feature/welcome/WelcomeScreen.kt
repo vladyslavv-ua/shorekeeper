@@ -41,6 +41,7 @@ fun WelcomeScreen(
                 is WelcomeEffect.OpenShore -> onNavigate(NavigationPaths.Shore.OpenedShore(effect.shoreId))
                 is WelcomeEffect.OpenCef -> onNavigate(NavigationPaths.OpenCef)
                 is WelcomeEffect.OpenEditShore -> onNavigate(NavigationPaths.Shore.EditShore(effect.shoreId))
+                is WelcomeEffect.OpenAbout -> onNavigate(NavigationPaths.About)
                 else -> Unit
             }
         }
@@ -110,11 +111,11 @@ fun WelcomeScreen(
             }) {
                 Text("Settings")
             }
-//            Button(onClick = {
-//                viewModel.onIntent(WelcomeIntent.OpenSettings)
-//            }) {
-//                Text("About")
-//            }
+            Button(onClick = {
+                viewModel.onIntent(WelcomeIntent.OpenAbout)
+            }) {
+                Text("About")
+            }
         }
     }
 

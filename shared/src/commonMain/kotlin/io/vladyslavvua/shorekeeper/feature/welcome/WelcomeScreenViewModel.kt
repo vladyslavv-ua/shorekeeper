@@ -52,9 +52,14 @@ class WelcomeScreenViewModel(
             is WelcomeIntent.OpenCef -> openCef()
             is WelcomeIntent.OpenEditShore -> openEditShore()
             is WelcomeIntent.OpenAddShoreDialog -> openAddShoreDialog()
+            is WelcomeIntent.OpenAbout -> openAbout()
             else -> Unit
         }
 
+    }
+
+    private fun openAbout() {
+        _events.trySend(WelcomeEffect.OpenAbout)
     }
 
     private fun openAddShoreDialog() {

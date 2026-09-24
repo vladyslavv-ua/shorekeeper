@@ -8,6 +8,7 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
+import io.vladyslavvua.shorekeeper.feature.about.AboutScreen
 import io.vladyslavvua.shorekeeper.feature.editShore.EditShoreScreen
 import io.vladyslavvua.shorekeeper.feature.openedCef.OpenedCefScreen
 import io.vladyslavvua.shorekeeper.feature.openedShore.OpenedShoreScreen
@@ -46,6 +47,9 @@ fun AppGraph() {
                         backStack.add(navPath)
                     }
                 )
+            }
+            entry<NavigationPaths.About> {
+                AboutScreen(onBackClick = backStack::removeLastOrNull)
             }
             entry<NavigationPaths.Shore.OpenedShore> { entry ->
                 OpenedShoreScreen(shoreId = entry.shoreId, backStack::removeLastOrNull)

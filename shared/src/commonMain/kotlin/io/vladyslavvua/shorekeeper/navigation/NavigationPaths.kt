@@ -25,5 +25,8 @@ sealed interface NavigationPaths : NavKey {
     object Settings : NavigationPaths
 
     @Serializable
+    object About : NavigationPaths
+
+    @Serializable
     object OpenCef : NavigationPaths
 }
