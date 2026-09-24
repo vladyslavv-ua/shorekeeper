@@ -22,6 +22,8 @@ kotlin {
     
     sourceSets {
         commonMain.dependencies {
+            implementation(libs.filekit.dialogs.compose)
+
             implementation(libs.jooq)
 
             implementation(ktorLibs.server.core)

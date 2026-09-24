@@ -13,7 +13,7 @@ data class CreateShoreDialogState(
     val authType: AuthType,
     val connectionString: String,
     val dbUser: String,
-    val dbPassword: String
+    val dbPassword: String,
 ) {
     fun toShore(): Shore = Shore(
         shorekeeperVersion = APP_VERSION_CODE,
@@ -29,4 +29,6 @@ data class CreateShoreDialogState(
             ) else null
         )
     )
+
+
 }
