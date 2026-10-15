@@ -2,6 +2,9 @@
 
 Shorekeeper is a rapid application development framework for building data-driven GUI applications
 
+## Important
+Do not use Jetbrains's JDK because of inbuilt JCEF which is incompatible with settings
+
 ## Using
 (currently under development)
 1. Clone the repo

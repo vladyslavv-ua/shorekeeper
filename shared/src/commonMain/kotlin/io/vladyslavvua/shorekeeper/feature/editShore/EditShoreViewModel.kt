@@ -32,38 +32,77 @@ import java.sql.DriverManager
 class EditShoreViewModel(
     @InjectedParam val shoreId: Long,
     private val shoreRepo: ShoreRepo,
-    private val settingsManager: ShorekeeperSettingsManager,
-    private val cefSettingsProvider: JcefSettingsProvider,
-    private val cefManager: JcefManager,
 ) : ViewModel() {
-
-    private lateinit var ktorServer: EmbeddedServer<NettyApplicationEngine, NettyApplicationEngine.Configuration>
-    private var cefClient: CefClient? = null
-
-    @Volatile
-    var browser: CefBrowser? = null
-    private val ktorConfig = SetupKtor()
-
-    private lateinit var shoreConfig: Shore
-    private lateinit var shore: ShoreTable
+    private val json = Json {
+        prettyPrint = true
+        ignoreUnknownKeys = true
+    }
+    lateinit var shoreConfig: Shore
+    lateinit var shore: ShoreTable
+    lateinit var connection: Connection
 
     val state: StateFlow<EditShoreState>
         field = MutableStateFlow(EditShoreState())
 
+
+    init {
+        viewModelScope.launch(Dispatchers.Default) {
+            val foundShore = shoreRepo.getShoreById(shoreId)
+            if (foundShore != null) {
+                shore = foundShore
+            } else {
+                throw Exception("Shore not found")
+            }
+            val config = File("${shore.path}/shore.json")
+            try {
+                shoreConfig = json.decodeFromString(config.readText())
+            } catch (e: Exception) {
+                throw Exception("Shore config not found or malformed")
+            }
+            processConnection()
+        }
+    }
+
+    private fun processConnection() {
+        when (shoreConfig.database.authType) {
+            AuthType.NONE -> {
+                state.update {
+                    it.copy(isAuthDialogOpen = false)
+                }
+                connection = DriverManager.getConnection(shoreConfig.database.connectionString)
+            }
+
+            AuthType.RUNTIME -> {
+                val currentState = state.value
+                if (!currentState.isAuthDialogOpen) {
+                    connection = DriverManager.getConnection(
+                        shoreConfig.database.connectionString,
+                        currentState.username,
+                        currentState.password
+                    )
+                }
+            }
+
+            AuthType.HARDCODED -> {
+                state.update {
+                    it.copy(isAuthDialogOpen = false)
+                }
+                connection = DriverManager.getConnection(
+                    shoreConfig.database.connectionString,
+                    shoreConfig.database.credentials!!.username,
+                    shoreConfig.database.credentials!!.password
+                )
+            }
+        }
+    }
+
     fun onIntent(intent: EditShoreIntent) {
         when (intent) {
-            is EditShoreIntent.SetUrl -> setUrl(intent.url)
-            is EditShoreIntent.RunCef -> runCef()
             is EditShoreIntent.SetCredentials -> setCredentials(intent.username, intent.password)
             else -> Unit
         }
     }
 
-    private fun setUrl(url: String) {
-        state.update {
-            it.copy(url = url)
-        }
-    }
 
     private fun setCredentials(username: String, password: String) {
         state.update {
@@ -73,74 +112,7 @@ class EditShoreViewModel(
                 password = password,
             )
         }
-    }
-
-    private fun runCef() {
-        viewModelScope.launch {
-            shore = shoreRepo.getShoreById(shoreId) ?: return@launch
-
-            shoreConfig = Json.decodeFromString<Shore>(File("${shore.path}/shore.json").readText())
-
-            when (shoreConfig.database.authType) {
-                AuthType.RUNTIME -> {
-                    val connection = DriverManager.getConnection(
-                        shoreConfig.database.connectionString,
-                        state.value.username,
-                        state.value.password
-                    )
-                    initKtor(shore)
-                    initCef(connection)
-                }
-
-                AuthType.HARDCODED -> {
-                    val connection = DriverManager.getConnection(
-                        shoreConfig.database.connectionString,
-                        shoreConfig.database.credentials!!.username,
-                        shoreConfig.database.credentials!!.password
-                    )
-                    initKtor(shore)
-                    initCef(connection)
-
-                }
-
-                else -> {
-                    val connection = DriverManager.getConnection(shoreConfig.database.connectionString)
-                    initKtor(shore)
-                    initCef(connection)
-
-                }
-            }
-
-        }
-    }
-
-    private fun initKtor(shore: ShoreTable) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                ktorServer = ktorConfig.setup(shore.path).also {
-                    it.start(wait = false)
-                }
-            }
-        }
-    }
-
-    private fun initCef(connection: Connection) {
-        viewModelScope.launch {
-            val queryRouter = ShoreCefRouter(
-                connection,
-                "${shore.path}/queries/"
-            )
-
-            val cefSettings = settingsManager.getCefSettings()
-            if (cefSettings.isCefSettingsValid()) {
-                cefSettingsProvider.provide(cefSettings)
-                cefManager.initCefApp()
-                cefClient = cefManager.buildJcefClient(listOf(queryRouter))
-                browser = cefClient!!.createBrowser(state.value.url, false, false)
-
-                state.update { it.copy(isCefReady = true) }
-            }
-        }
+        processConnection()
     }
 
 }

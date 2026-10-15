@@ -7,9 +7,7 @@ import kotlinx.serialization.Serializable
 sealed interface NavigationPaths : NavKey {
 
     @Serializable
-    object Welcome : NavigationPaths {
-
-    }
+    object Welcome : NavigationPaths
 
     @Serializable
     data object Shore : NavigationPaths {
@@ -17,7 +15,9 @@ sealed interface NavigationPaths : NavKey {
         data class OpenedShore(val shoreId: Long) : NavigationPaths
 
         @Serializable
-        data class EditShore(val shoreId: Long) : NavigationPaths
+        data class EditShore(val shoreId: Long) : NavigationPaths {
+
+        }
     }
 
 

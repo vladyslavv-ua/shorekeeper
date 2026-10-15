@@ -22,7 +22,14 @@ class JcefManager(
 
         return initMutex.withLock {
             cefApp ?: run {
+
+                println("java.home = ${System.getProperty("java.home")}")
+                println("java.version = ${System.getProperty("java.version")}")
+                println("jdk.module.path = ${System.getProperty("jdk.module.path")}")
+                println("jcef module = ${CefApp::class.java.module}")
+
                 val settings = settingsProvider.awaitSettings()
+                val cefCachePath = File(settings.cefCachePath).absolutePath
 
                 val builder = CefAppBuilder()
                 builder.setInstallDir(File(settings.cefPath))
@@ -31,7 +38,7 @@ class JcefManager(
                     windowless_rendering_enabled = false
                     browser_subprocess_path = settings.cefHelper
                     isDebugInspectorInfoEnabled = true
-                    root_cache_path = File(settings.cefCachePath).absolutePath
+                    cache_path = cefCachePath
                     remote_debugging_port = 9222
                 }
 

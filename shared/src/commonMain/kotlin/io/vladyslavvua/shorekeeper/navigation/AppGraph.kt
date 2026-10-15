@@ -2,6 +2,7 @@ package io.vladyslavvua.shorekeeper.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
+import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
@@ -19,21 +20,8 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 
 
-@OptIn(ExperimentalSerializationApi::class)
 @Composable
-fun AppGraph() {
-
-    val navSavedStateConfig = SavedStateConfiguration {
-        serializersModule = SerializersModule {
-            polymorphic(NavKey::class) {
-                subclassesOfSealed<NavigationPaths>()
-            }
-        }
-    }
-
-    val backStack = rememberNavBackStack(navSavedStateConfig, NavigationPaths.Welcome)
-
-
+fun AppGraph(backStack: NavBackStack<NavKey>) {
     NavDisplay(
         backStack,
         entryDecorators = listOf(

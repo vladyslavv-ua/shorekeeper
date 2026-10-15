@@ -3,20 +3,18 @@ package io.vladyslavvua.shorekeeper.jcef.usecase
 import io.vladyslavvua.shorekeeper.shore.entity.ShoreQuery
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.boolean
 import kotlinx.serialization.json.float
 import kotlinx.serialization.json.int
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import java.io.File
-import java.io.ObjectInput
 import java.sql.Connection
 import java.sql.PreparedStatement
 import kotlin.collections.forEach
 
 class QueryProcessor(private val queryPath: String, private val connection: Connection) {
-    private val queries = initQueries(queryPath)
+    private var queries = initQueries(queryPath)
 
     private fun initQueries(queryPath: String): List<ShoreQuery> {
         val folder = File(queryPath)
@@ -24,14 +22,20 @@ class QueryProcessor(private val queryPath: String, private val connection: Conn
             Json.decodeFromString<ShoreQuery>(it.readText())
         } ?: emptyList()
         return queries
-
-
     }
 
-    fun prepareQuery(query: String, parameters: JsonArray): PreparedStatement {
-        val query = queries.firstOrNull { it.name == query }
+    private fun refreshQueries() {
+        queries = initQueries(queryPath)
+    }
+
+    fun prepareQuery(queryName: String, parameters: JsonArray): PreparedStatement {
+        var query = queries.firstOrNull { it.name == queryName }
         if (query == null) {
-            throw Exception("Query not found")
+            refreshQueries()
+            query = queries.firstOrNull { it.name == queryName }
+            if (query == null) {
+                throw Exception("Query not found")
+            }
         }
         val preparedStatement = connection.prepareStatement(query.query)
 
