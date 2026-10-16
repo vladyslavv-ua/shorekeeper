@@ -3,6 +3,7 @@ package io.vladyslavvua.shorekeeper.feature.editShore
 data class EditShoreState(
 
     val isAuthDialogOpen: Boolean = true,
+    val isShoreReady: Boolean = false,
 
     val username: String = "",
     val password: String = "",

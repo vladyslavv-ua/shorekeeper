@@ -25,6 +25,8 @@ import io.vladyslavvua.shorekeeper.feature.editShore.cef.EditShoreCef
 import io.vladyslavvua.shorekeeper.feature.editShore.cef.EditShoreCefIntent
 import io.vladyslavvua.shorekeeper.feature.editShore.cef.EditShoreCefViewModel
 import io.vladyslavvua.shorekeeper.feature.editShore.dto.TabElement
+import io.vladyslavvua.shorekeeper.feature.editShore.quickActions.QuickActionsScreen
+import io.vladyslavvua.shorekeeper.feature.editShore.quickActions.QuickActionsScreenViewModel
 import io.vladyslavvua.shorekeeper.feature.editShore.sidebar.EditShoreSidebar
 import io.vladyslavvua.shorekeeper.navigation.EditShore
 import io.vladyslavvua.shorekeeper.ui.components.AuthDialog
@@ -77,6 +79,7 @@ fun EditShoreScreen(shoreId: Long) {
                     it.destination == destination
                 }
             })
+        if (state.isShoreReady)
         Column(modifier = Modifier.weight(1f)) {
             NavDisplay(
                 backStack = backStacks[selectedTab]!!,
@@ -86,7 +89,16 @@ fun EditShoreScreen(shoreId: Long) {
                 ),
                 entryProvider = entryProvider {
                     entry<EditShore.Tab.QuickSetup> {
-                        Text("Quick Setup")
+                        val viewModel: QuickActionsScreenViewModel = koinViewModel(
+                            parameters = {
+                                parametersOf(
+                                    viewModel.shore,
+                                    viewModel.shoreConfig,
+                                    viewModel.connection
+                                )
+                            }
+                        )
+                        QuickActionsScreen(viewModel)
                     }
                     entry<EditShore.Tab.Cef> {
                         val viewModel: EditShoreCefViewModel = koinViewModel(

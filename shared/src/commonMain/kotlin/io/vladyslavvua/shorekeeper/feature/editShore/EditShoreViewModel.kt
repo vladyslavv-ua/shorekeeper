@@ -94,6 +94,12 @@ class EditShoreViewModel(
                 )
             }
         }
+
+        if (this::connection.isInitialized){
+            state.update {
+                it.copy(isShoreReady = true)
+            }
+        }
     }
 
     fun onIntent(intent: EditShoreIntent) {

@@ -25,4 +25,27 @@ class LiquibaseMigrator(private val cliPath: String) : ShorekeeperMigrator {
         File("$projectPath/migrations/changelog-master.yaml").createNewFile()
     }
 
+    override fun migrate(projectPath: String, jdbcUrl: String, user: String?, password: String?): ProcessBuilder {
+        if (user == null || password == null) {
+            return ProcessBuilder(
+                listOf(
+                    cliPath,
+                    "--search-path", "$projectPath/migrations",
+                    "--defaults-file", "$projectPath/migrations/liquibase.properties",
+                    "update"
+                )
+            )
+        } else {
+            return ProcessBuilder(
+                listOf(
+                    cliPath,
+                    "--search-path", "$projectPath/migrations",
+                    "--defaults-file", "$projectPath/migrations/liquibase.properties",
+                    "update",
+                    "--username", user,
+                    "--password", password
+                )
+            )
+        }
+    }
 }
