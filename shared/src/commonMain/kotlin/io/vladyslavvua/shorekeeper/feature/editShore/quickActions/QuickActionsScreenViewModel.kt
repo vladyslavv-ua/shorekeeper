@@ -7,7 +7,6 @@ import io.vladyslavvua.shorekeeper.settings.ShorekeeperSettingsManager
 import io.vladyslavvua.shorekeeper.shore.entity.AuthType
 import io.vladyslavvua.shorekeeper.shore.entity.Shore
 import io.vladyslavvua.shorekeeper.shore.util.initShorekeeperSettingsTable
-import io.vladyslavvua.shorekeeper.shore.util.printSupportedTypes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

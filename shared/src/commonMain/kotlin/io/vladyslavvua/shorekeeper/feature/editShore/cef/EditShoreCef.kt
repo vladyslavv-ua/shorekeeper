@@ -20,14 +20,22 @@ fun EditShoreCef(viewModel: EditShoreCefViewModel) {
         TextField(
             value = state.url,
             onValueChange = { viewModel.onIntent(EditShoreCefIntent.SetUrl(it)) })
-        Button(onClick = { viewModel.onIntent(EditShoreCefIntent.RunCef) }) {
-            Text("Run")
+        Row {
+            Button(onClick = { viewModel.onIntent(EditShoreCefIntent.RunCef) }) {
+                Text("Run")
+            }
+            Button(
+                onClick = { viewModel.onIntent(EditShoreCefIntent.ToggleDevTools) },
+                enabled = state.isCefReady
+            ) {
+                Text(if (state.isDevToolsOpen) "Close DevTools" else "DevTools")
+            }
         }
-
 
 
         if (state.isCefReady) {
             BrowserView(viewModel.browser!!)
         }
+
     }
 }

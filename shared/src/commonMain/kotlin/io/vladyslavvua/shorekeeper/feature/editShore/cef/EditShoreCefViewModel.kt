@@ -42,7 +42,7 @@ class EditShoreCefViewModel(
     private val settingsManager: ShorekeeperSettingsManager,
     private val cefSettingsProvider: JcefSettingsProvider,
     private val cefManager: JcefManager,
-): ViewModel() {
+) : ViewModel() {
     private lateinit var ktorServer: EmbeddedServer<NettyApplicationEngine, NettyApplicationEngine.Configuration>
     private var cefClient: CefClient? = null
 
@@ -54,10 +54,12 @@ class EditShoreCefViewModel(
         field = MutableStateFlow(EditShoreCefState())
 
 
-    fun onIntent(intent: EditShoreCefIntent){
-        when(intent){
+    fun onIntent(intent: EditShoreCefIntent) {
+        when (intent) {
             is EditShoreCefIntent.SetUrl -> setUrl(intent.url)
             is EditShoreCefIntent.RunCef -> runCef()
+            is EditShoreCefIntent.ToggleDevTools -> toggleDevTools()
+            else -> Unit
         }
     }
 
@@ -68,8 +70,20 @@ class EditShoreCefViewModel(
 
     }
 
+    private fun toggleDevTools() {
+        val browser = browser ?: return
+        if (state.value.isDevToolsOpen) {
+            browser.closeDevTools()
+        } else {
+            browser.openDevTools()
+        }
+        state.update {
+            it.copy(isDevToolsOpen = !it.isDevToolsOpen)
+        }
+    }
+
     private fun runCef() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             initKtor(shore)
             initCef(connection)
 
@@ -97,13 +111,10 @@ class EditShoreCefViewModel(
     }
 
 
-    private fun initKtor(shore: ShoreTable) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                ktorServer = ktorConfig.setup(shore.path).also {
-                    it.start(wait = false)
-                }
-            }
+    private suspend fun initKtor(shore: ShoreTable) {
+        ktorServer = ktorConfig.setup(shore.path).also {
+            it.start(wait = false)
+
         }
     }
 
