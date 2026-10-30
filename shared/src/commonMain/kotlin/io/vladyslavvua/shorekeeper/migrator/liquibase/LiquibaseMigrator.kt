@@ -31,6 +31,7 @@ class LiquibaseMigrator(private val cliPath: String) : ShorekeeperMigrator {
                 listOf(
                     cliPath,
                     "--search-path", "$projectPath/migrations",
+                    "--url", jdbcUrl,
                     "--defaults-file", "$projectPath/migrations/liquibase.properties",
                     "update"
                 )
@@ -42,6 +43,7 @@ class LiquibaseMigrator(private val cliPath: String) : ShorekeeperMigrator {
                     "--search-path", "$projectPath/migrations",
                     "--defaults-file", "$projectPath/migrations/liquibase.properties",
                     "update",
+                    "--url", jdbcUrl,
                     "--username", user,
                     "--password", password
                 )
