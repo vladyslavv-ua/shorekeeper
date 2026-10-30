@@ -17,4 +17,7 @@ interface ShoreDao {
 
     @Query("SELECT * FROM shore WHERE id = :shoreId")
     suspend fun getShoreById(shoreId: Long): ShoreTable?
+
+    @Query("DELETE FROM shore WHERE id = :shoreId")
+    suspend fun deleteShoreById(shoreId: Long)
 }

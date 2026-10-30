@@ -7,6 +7,8 @@ import io.vladyslavvua.shorekeeper.feature.welcome.map.toShoreState
 import io.vladyslavvua.shorekeeper.room.repo.ShoreRepo
 import io.vladyslavvua.shorekeeper.settings.ShorekeeperSettingsManager
 import io.vladyslavvua.shorekeeper.shore.util.initShoreFileStructure
+import io.vladyslavvua.shorekeeper.shore.util.validateShore
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -50,12 +52,66 @@ class WelcomeScreenViewModel(
             is WelcomeIntent.CreateShore -> createShore(intent.params)
             is WelcomeIntent.SelectShore -> selectShore(intent.id)
             is WelcomeIntent.OpenCef -> openCef()
+
+            is WelcomeIntent.OpenDeleteShoreDialog -> openDeleteShoreDialog()
+            is WelcomeIntent.CloseDeleteShoreDialog -> closeDeleteShoreDialog()
+            is WelcomeIntent.DeleteShore -> deleteShore(intent.deleteFiles)
+
             is WelcomeIntent.OpenEditShore -> openEditShore()
+
             is WelcomeIntent.OpenAddShoreDialog -> openAddShoreDialog()
+            is WelcomeIntent.CloseAddShoreDialog -> closeAddShoreDialog()
+            is WelcomeIntent.AddShore -> addShore(intent.name, intent.path)
+
             is WelcomeIntent.OpenAbout -> openAbout()
             else -> Unit
         }
 
+    }
+
+    private fun addShore(name: String, path: String) {
+        val isValid = validateShore(path)
+        if (isValid != null) {
+            viewModelScope.launch(Dispatchers.Main) {
+                shoreRepo.insertShore(name, path)
+                initShoreDb()
+                closeAddShoreDialog()
+            }
+        }
+    }
+
+    private fun closeAddShoreDialog() {
+        state.update {
+            it.copy(isAddShoreDialogOpen = false)
+        }
+    }
+
+    private fun deleteShore(deleteFiles: Boolean) {
+        val selectedShore = state.value.shores.firstOrNull { it.selected }
+        if (selectedShore == null) {
+            return
+        }
+        if (deleteFiles) {
+            File(selectedShore.path).deleteRecursively()
+        }
+        viewModelScope.launch(Dispatchers.Main) {
+            shoreRepo.deleteShoreById(selectedShore.id)
+            initShoreDb()
+            closeDeleteShoreDialog()
+        }
+
+    }
+
+    private fun closeDeleteShoreDialog() {
+        state.update {
+            it.copy(isDeleteShoreDialogOpen = false)
+        }
+    }
+
+    private fun openDeleteShoreDialog() {
+        state.update {
+            it.copy(isDeleteShoreDialogOpen = true)
+        }
     }
 
     private fun openAbout() {
@@ -63,7 +119,9 @@ class WelcomeScreenViewModel(
     }
 
     private fun openAddShoreDialog() {
-
+        state.update {
+            it.copy(isAddShoreDialogOpen = true)
+        }
     }
 
     private fun selectShore(id: Long) {
@@ -122,7 +180,12 @@ class WelcomeScreenViewModel(
             )
             val formattedPath = File(shore.path).absolutePath
             migrator.initFileStructure(formattedPath)
-            val process = migrator.initProject("${formattedPath}/migrations", shore.connectionString, shore.dbUser, shore.dbPassword)
+            val process = migrator.initProject(
+                "${formattedPath}/migrations",
+                shore.connectionString,
+                shore.dbUser,
+                shore.dbPassword
+            )
             process.inheritIO()
             process.start().waitFor()
 

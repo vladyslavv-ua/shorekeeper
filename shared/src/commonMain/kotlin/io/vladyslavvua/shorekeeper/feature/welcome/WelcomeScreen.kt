@@ -15,7 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import io.vladyslavvua.shorekeeper.feature.welcome.addShoreDialog.AddShoreDialog
 import io.vladyslavvua.shorekeeper.feature.welcome.createShoreDialog.CreateShoreDialog
+import io.vladyslavvua.shorekeeper.feature.welcome.deleteShoreDialog.DeleteShoreDialog
 import io.vladyslavvua.shorekeeper.navigation.NavigationPaths
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -31,6 +33,24 @@ fun WelcomeScreen(
         CreateShoreDialog({
             viewModel.onIntent(WelcomeIntent.CreateShore(it))
         }, { viewModel.onIntent(WelcomeIntent.CloseCreateShoreDialog) })
+    }
+
+    if (state.isDeleteShoreDialogOpen) {
+        DeleteShoreDialog(
+            onConfirm = {
+                viewModel.onIntent(WelcomeIntent.DeleteShore(it))
+            },
+            onDismiss = { viewModel.onIntent(WelcomeIntent.CloseDeleteShoreDialog) }
+        )
+    }
+
+    if (state.isAddShoreDialogOpen){
+        AddShoreDialog(
+            onConfirm = { name, path ->
+                viewModel.onIntent(WelcomeIntent.AddShore(name, path))
+            },
+            onDismiss = { viewModel.onIntent(WelcomeIntent.CloseAddShoreDialog) }
+        )
     }
 
 
@@ -87,6 +107,12 @@ fun WelcomeScreen(
                 }) {
                     Text("Add shore")
                 }
+                Button(onClick = {
+                    viewModel.onIntent(WelcomeIntent.OpenDeleteShoreDialog)
+                }, enabled = state.isAnyShoreSelected) {
+                    Text("Delete shore")
+                }
+
 
                 Button(onClick = {
                     viewModel.onIntent(WelcomeIntent.OpenEditShore)

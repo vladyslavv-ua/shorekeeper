@@ -23,4 +23,8 @@ class ShoreRepo(
     suspend fun getShoreById(shoreId: Long): ShoreTable? {
         return shoreDao.getShoreById(shoreId)
     }
+
+    suspend fun deleteShoreById(shoreId: Long) {
+        shoreDao.deleteShoreById(shoreId)
+    }
 }

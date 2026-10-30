@@ -9,9 +9,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.onClick
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -29,6 +33,9 @@ import io.github.vinceglb.filekit.absolutePath
 import io.github.vinceglb.filekit.dialogs.compose.rememberDirectoryPickerLauncher
 import io.vladyslavvua.shorekeeper.shore.entity.AuthType
 import io.vladyslavvua.shorekeeper.shore.entity.Migrator
+import org.jetbrains.compose.resources.painterResource
+import shorekeeper.shared.generated.resources.Res
+import shorekeeper.shared.generated.resources.folder_open
 
 @Composable
 fun CreateShoreDialog(onCreate: (CreateShoreDialogState) -> Unit, onCancel: () -> Unit) {
@@ -65,17 +72,44 @@ fun CreateShoreDialog(onCreate: (CreateShoreDialogState) -> Unit, onCancel: () -
 
             TextField(shoreName, onValueChange = { shoreName = it }, placeholder = { Text("Shore name") })
             Row {
-                TextField(shorePath, onValueChange = { shorePath = it }, placeholder = { Text("Shore path") })
-                Button(onClick = { launcher.launch() }) {
-                    Text("Select Shore Path")
-                }
+                TextField(
+                    shorePath, onValueChange = { shorePath = it }, placeholder = { Text("Shore path") },
+                    trailingIcon = {
+                        Icon(
+                            painter = painterResource(Res.drawable.folder_open),
+                            contentDescription = null,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    })
             }
-//            TextField(shoreMigrator.name, onValueChange = { shoreMigrator = Migrator.valueOf(it) }, placeholder = { Text("Shore migrator") })
-//            TextField(authDb.name, onValueChange = { authDb = AuthDb.valueOf(it) }, placeholder = { Text("Auth db") })
             TextField(
                 shoreDbConnection,
                 onValueChange = { shoreDbConnection = it },
                 placeholder = { Text("Shore db connection") })
+
+            Text("Migration tool selection")
+            Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start) {
+
+                Row(Modifier.clickable(interactionSource = null, indication = null) {
+                    shoreMigrator = Migrator.LIQUIBASE
+                }, verticalAlignment = Alignment.CenterVertically) {
+                    RadioButton(
+                        selected = shoreMigrator == Migrator.LIQUIBASE,
+                        onClick = { shoreMigrator = Migrator.LIQUIBASE })
+                    Text("Liquibase")
+                }
+
+                Row(Modifier.clickable(interactionSource = null, indication = null) {
+                    shoreMigrator = Migrator.FLYWAY
+                }, verticalAlignment = Alignment.CenterVertically) {
+                    RadioButton(
+                        selected = shoreMigrator == Migrator.FLYWAY,
+                        onClick = { shoreMigrator = Migrator.FLYWAY })
+                    Text("Flyway")
+                }
+            }
+
+
 
             Text("Auth type")
             Column() {
@@ -120,8 +154,11 @@ fun CreateShoreDialog(onCreate: (CreateShoreDialogState) -> Unit, onCancel: () -
                     Text("Hardcoded (recommended for exceptional cases only)")
                 }
             }
-            TextField(dbUser, onValueChange = { dbUser = it }, placeholder = { Text("Db user ") })
-            TextField(dbPassword, onValueChange = { dbPassword = it }, placeholder = { Text("Db password") })
+
+            if (authType == AuthType.HARDCODED) {
+                TextField(dbUser, onValueChange = { dbUser = it }, placeholder = { Text("Db user ") })
+                TextField(dbPassword, onValueChange = { dbPassword = it }, placeholder = { Text("Db password") })
+            }
 
 
             Row {

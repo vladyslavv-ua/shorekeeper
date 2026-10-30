@@ -6,7 +6,9 @@ import io.vladyslavvua.shorekeeper.room.entity.ShoreTable
 data class WelcomeState(
     val shores: List<ShoreState> = emptyList(),
     val isCreateShoreDialogOpen: Boolean = false,
-    val isAnyShoreSelected: Boolean = false
+    val isAnyShoreSelected: Boolean = false,
+    val isDeleteShoreDialogOpen: Boolean = false,
+    val isAddShoreDialogOpen: Boolean = false
 ) {
     data class ShoreState(
         val id: Long,
@@ -25,11 +27,16 @@ sealed class WelcomeIntent {
     data class SelectShore(val id: Long) : WelcomeIntent()
 
     data object OpenAddShoreDialog : WelcomeIntent()
+    data object CloseAddShoreDialog : WelcomeIntent()
+    data class AddShore(val name: String, val path: String) : WelcomeIntent()
 
-    data object OpenCef: WelcomeIntent()
-    data object OpenEditShore: WelcomeIntent()
+    data object OpenCef : WelcomeIntent()
+    data object OpenEditShore : WelcomeIntent()
+    data object OpenDeleteShoreDialog : WelcomeIntent()
+    data object CloseDeleteShoreDialog : WelcomeIntent()
+    data class DeleteShore(val deleteFiles: Boolean) : WelcomeIntent()
 
-    data object OpenAbout: WelcomeIntent()
+    data object OpenAbout : WelcomeIntent()
 
 
 }
@@ -43,5 +50,5 @@ sealed class WelcomeEffect {
 
     data class OpenEditShore(val shoreId: Long) : WelcomeEffect()
 
-    data object OpenAbout: WelcomeEffect()
+    data object OpenAbout : WelcomeEffect()
 }

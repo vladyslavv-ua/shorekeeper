@@ -1,3 +1,5 @@
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
+
 plugins {
     // this is necessary to avoid the plugins to be loaded multiple times
     // in each subproject's classloader
@@ -11,3 +13,8 @@ plugins {
     alias(libs.plugins.androidx.room3) apply false
 }
 
+
+tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
+    revision = "release"
+    outputFormatter = "json"
+}
